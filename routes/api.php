@@ -4,6 +4,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\PostController;
+use App\Http\Controllers\UserController;
 
 /*
 |--------------------------------------------------------------------------
@@ -20,6 +21,9 @@ use App\Http\Controllers\PostController;
 //     return $request->user();
 // });
 
+Route::get('/', function(){
+    return view('home');
+});
 
 Route::controller(AuthController::class)->group(function () {
     Route::post('login', 'login');
@@ -35,5 +39,20 @@ Route::controller(PostController::class)->group(function(){
     Route::get('post/{id}','show');
     Route::put('post/{id}','update');
     Route::delete('post/{id}','destroy');
+    // Route::apiResource('post',PostController::class);
 
 });
+
+Route::controller(UserController::class)->group(function () {
+    Route::get('user/','index');
+    Route::post('user/store/','store');
+    Route::get('user/{id}','show');
+    Route::put('user/{id}','update');
+    Route::delete('user/{id}','destroy');
+    // Route::apiResource('user',PostController::class);
+
+
+});
+
+
+
