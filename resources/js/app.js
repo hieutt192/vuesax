@@ -1,14 +1,17 @@
 import './bootstrap';
 
 
-import { createApp } from 'vue';
-import app from './components/app.vue';
+import Vue from 'vue';
+import Base from './components/Base.vue'
 import router from "./routes";
 
 
 
-createApp(app).use(router).mount('#app')
+// Vue.config.productionTip = false;
+// Vue.use(Vuesax, {});
 
-
-
-
+new Vue({
+    el: '#app',
+    router,
+    render: h => h(Base)
+ }).$mount('app')

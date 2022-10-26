@@ -1,58 +1,51 @@
-<script setup>
-import { reactive, ref } from 'vue'
-import { useRouter } from 'vue-router'
-
-//vuesax
-import Vuesax from 'vuesax'
-import 'vuesax/dist/vuesax.css'
-
-const router = useRouter()
-
-let form = reactive({
-    email: '',
-    password: '',
-})
-
-let errors = ref('')
-
-const login = async () => {
-    await axios.post('/api/login', form)
-        .then(response => {
-            if (response.data.success) {
-                localStorage.setItem('token',response.data.data.token)
-                router.push('/admin/home')
-            } else {
-                errors.value = response.data.message;
-            }
-        })
-}
-</script>
-
 <template>
-
-    <!-- new -->
-    <div id="backend-view">
-    <form @submit.prevent="login">
+  <div id="backend-view">
+    <form @submit.prevent="onSubmit">
       <h3>Login Here</h3>
       <label for="email">Email</label>
-      <input type="text" id="email" v-model="form.email" />
-      <span v-if="errors.email" class="error">{{ errors.email[0] }}</span>
+      <input type="text" id="email" v-model="email" />
+      <!-- <span v-if="errors.email" class="error">{{ errors.email[0] }}</span> -->
 
       <label for="password">Password</label>
-      <input type="password" id="password" v-model="form.password" />
-      <span v-if="errors.password" class="error">{{ errors.password[0] }}</span>
+      <input type="password" id="password" v-model="password" />
+      <!-- <span v-if="errors.password" class="error">{{ errors.password[0] }}</span> -->
 
       <button type="submit">Log In</button>
       <span>Don't have an account?<router-link to="/register"> <a href="">Sign up</a></router-link></span>
     </form>
   </div>
-
 </template>
 
-<style scoped>
+<script>
+export default {
+    data:() =>  ({
+        'email': '',
+        'password': '',
+
+    }),
+
+    methods: {
+        onSubmit() {
+            const data = {
+                email: this.email,
+                password: this.password,
+
+            }
+
+            axios.post('api/auth/login', data, {}).then((res) => {
+                console.log(res.data);
+            }).catch((err) => {
+                console.log(err.response.data);
+            });
 
 
-    /* new */
+        }
+    },
+}
+</script>
+
+<style>
+/* new */
     #backend-view {
   height: 100vh;
   background-color: #f3f4f6;
@@ -71,7 +64,6 @@ const login = async () => {
     letter-spacing: 0.5px;
     outline: none;
     }
-
     label {
     display: block;
     margin-top: 20px;
@@ -88,7 +80,6 @@ const login = async () => {
     font-size: 16px;
     font-weight: 300;
     }
-
     button {
     margin-top: 50px;
     width: 100%;
