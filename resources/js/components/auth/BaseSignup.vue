@@ -1,5 +1,5 @@
 <template>
-    <form @submit.prevent="onSubmit" class="knd-form">
+    <form v-on:submit.prevent="onSubmit" class="knd-form">
         <!-- input -->
         <div class="knd-form-x">
             <h3>Register Form</h3>
@@ -14,7 +14,7 @@
             <div class="knd-form-field">
                     <vs-input label="Email" v-model="email" placeholder="YourEmail@gmail.com">
                         <template #icon>
-                        <i class='bx bx-user'></i>
+                        <i class='bx bx-envelope'></i>
                         </template>
                         <template v-if="validEmail" #message-success>
                         Email Valid
@@ -45,15 +45,12 @@
             </div>
 
             <div class="knd-form-field">
-                    <vs-input  type="password" v-model="value1" label-placeholder="Confirm_Password"
-
+                    <vs-input  type="password" v-model="confirm_password" label-placeholder="Confirm_Password"
+                    
                     :visiblePassword="hasVisiblePassword"
                     icon-after
                     @click-icon="hasVisiblePassword = !hasVisiblePassword">
-                        <template #icon>
-                        <i v-if="!hasVisiblePassword" class='bx bx-show-alt'></i>
-                        <i v-else class='bx bx-hide'></i>
-                        </template>
+                        
                     </vs-input>
             </div>
 
@@ -83,6 +80,7 @@ export default {
         'email': '',
         'password': '',
         'confirm_password': '',
+        hasVisiblePassword: false
     }),
 
     methods: {
@@ -92,25 +90,25 @@ export default {
                 name: this.name,
                 email: this.email,
                 password: this.password,
-
+                confirm_password: this.confirm_password,
             }
 
-            axios.post('api/auth/register', data, {}).then((res) => {
+            axios.post('api/register', data, {}).then((res) => {
                 this.$vs.notification({
                     flat: true,
                     color:'success',
                     position:'top-center',
-                    title: 'Login Success',
+                    title: 'Register Successful',
                     // text: res.data.access_token,
-                    text: "Welcome to my page",
+                    text: res.data.message,
                 })
             }).catch((err) => {
                 this.$vs.notification({
                     flat: true,
                     color:'danger',
                     position:'top-center',
-                    title: 'Login Fail',
-                    text: err.response.data.error
+                    title: 'Register Fail',
+                    text: err.response.data.message
                 })
             });
         },
@@ -121,6 +119,43 @@ export default {
         validEmail() {
           return /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(this.email)
         },
+        
+        getProgress() {
+          let progress = 0
+
+          // at least one number
+
+          if (/\d/.test(this.password)) {
+            progress += 20
+          }
+
+          // at least one capital letter
+
+          if (/(.*[A-Z].*)/.test(this.password)) {
+            progress += 20
+          }
+
+          // at menons a lowercase
+
+          if (/(.*[a-z].*)/.test(this.password)) {
+            progress += 20
+          }
+
+          // more than 5 digits
+
+          if (this.password.length >= 6) {
+            progress += 20
+          }
+
+          // at least one special character
+
+          if (/[^A-Za-z0-9]/.test(this.password)) {
+            progress += 20
+          }
+
+          return progress
+        },
+
 
     }
 

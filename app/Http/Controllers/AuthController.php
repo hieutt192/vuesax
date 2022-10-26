@@ -4,6 +4,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use App\Models\User;
+use Illuminate\Support\Facades\Validator;
 
 class AuthController extends Controller
 {
@@ -41,15 +42,42 @@ class AuthController extends Controller
 
     }
 
+
+
     public function register(Request $request){
-        $request->validate([
-            'name' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255|unique:users',
+        // $request->validate([
+        //     'name' => 'required|string|max:255',
+        //     'email' => 'required|string|email|max:255|unique:users',
+        //     'password' => 'required|string|min:6',
+        //     'confirm_password' => 'required',
+        // ]);
+
+        $validation = Validator::make($request->all(),[
+            'name' => 'required',
+            'email' => 'required',
             'password' => 'required|string|min:6',
             'confirm_password' => 'required',
         ]);
 
-        $
+        $unique_email = User::where('email',$request->email)->first();
+
+        if ($unique_email) {
+            # code...
+            return response()->json([
+                'message' => "Email already exists !"
+            ], 400);
+        }
+        if ($request->password != $request->confirm_password) {
+            # code...
+            return response()->json([
+                'message' => "Password don't match !"
+            ], 400);
+        }
+
+        if ($validation->fails()) {
+            # code...
+            return response()->json($validation->errors());
+        }
 
         $user = User::create([
             'name' => $request->name,

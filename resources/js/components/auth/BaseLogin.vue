@@ -7,7 +7,7 @@
             <div class="knd-form-field">
                 <vs-input type="email" label="Email" v-model="email" placeholder="YourEmail@gmail.com">
                     <template #icon>
-                    <i class='bx bx-user'></i>
+                    <i class='bx bx-envelope'></i>
                     </template>
                     <template v-if="validEmail" #message-success>
                     Email Valid
@@ -67,14 +67,14 @@ export default {
 
             }
 
-            axios.post('api/auth/login', data, {}).then((res) => {
+            axios.post('api/login', data, {}).then((res) => {
                 this.$vs.notification({
                     flat: true,
                     color:'success',
                     position:'top-center',
-                    title: 'Login Success',
+                    title: 'Login Successful',
                     // text: res.data.access_token,
-                    text: "Welcome to my page",
+                    text: "Welcome to my page !",
                 })
             }).catch((err) => {
                 this.$vs.notification({
@@ -82,7 +82,9 @@ export default {
                     color:'danger',
                     position:'top-center',
                     title: 'Login Fail',
-                    text: err.response.data.error
+                    // text: err.response.data.error,
+                    text: "Email or Password incorrect !",
+
                 })
             });
 
