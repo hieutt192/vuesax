@@ -1,32 +1,37 @@
 <template>
-<div>
-    <nav>
+ <div class="center examplex">
+      <vs-navbar center-collapsed v-model="active">
+        <template #left>
+          <img src="/logo2.png" alt="">
+        </template>
+        <vs-navbar-item :active="active == 'guide'" id="guide">
+          Guide
+        </vs-navbar-item>
+        <vs-navbar-item :active="active == 'docs'" id="docs">
+          Documents
+        </vs-navbar-item>
+        <vs-navbar-item :active="active == 'components'" id="components">
+          Components
+        </vs-navbar-item>
+        <vs-navbar-item :active="active == 'license'" id="license">
+          license
+        </vs-navbar-item>
+        <template #right>
+          <vs-button flat @click="handleCLickHistory('/login')" >Login</vs-button>
+          <vs-button v-on:click="handleCLickHistory('/signup')">Signup</vs-button>
+        </template>
+      </vs-navbar>
 
-        <ul>
-        <h3> Training </h3>
-            <li>
-            <a v-on:click="handleCLickHistory('/')">
-                Home
-            </a>
-        </li>
-        <li>
-            <a v-on:click="handleCLickHistory('/Login')">
-                Login
-            </a>
-        </li>
-        <li>
-            <a v-on:click="handleCLickHistory('/Signup')">
-                Signup
-            </a>
-        </li>
-
-    </ul>
-    </nav>
-</div>
+    </div>
 </template>
 
 <script>
 export default {
+
+    data:() => ({
+      active: 'guide'
+    }),
+
     methods:{
             handleCLickHistory(newValue){
                 this.$router.push(newValue)
@@ -36,7 +41,7 @@ export default {
 </script>
 
 <style>
-    h3 {
+    /* h3 {
         padding-right: 100rem;
     }
     nav {
@@ -61,6 +66,6 @@ export default {
     ul li a{
         text-decoration: none !important;
         color:white none !important;
-    }
+    } */
 
 </style>

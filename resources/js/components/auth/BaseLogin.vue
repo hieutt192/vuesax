@@ -1,26 +1,61 @@
 <template>
-  <div id="backend-view">
-    <form @submit.prevent="onSubmit">
-      <h3>Login Here</h3>
-      <label for="email">Email</label>
-      <input type="text" id="email" v-model="email" />
-      <!-- <span v-if="errors.email" class="error">{{ errors.email[0] }}</span> -->
+    <!-- new -->
+    <form @submit.prevent="onSubmit" class="knd-form">
+        <!-- input -->
+        <div class="knd-form-x">
+            <h3>Login Form</h3>
+            <div class="knd-form-field">
+                <vs-input type="email" label="Email" v-model="email" placeholder="YourEmail@gmail.com">
+                    <template #icon>
+                    <i class='bx bx-user'></i>
+                    </template>
+                    <template v-if="validEmail" #message-success>
+                    Email Valid
+                    </template>
+                    <template v-if="!validEmail && email !== ''" #message-danger>
+                    Email Invalid
+                    </template>
+                </vs-input>
+            </div>
 
-      <label for="password">Password</label>
-      <input type="password" id="password" v-model="password" />
-      <!-- <span v-if="errors.password" class="error">{{ errors.password[0] }}</span> -->
+       <!-- password -->
+            <div class="knd-form-field">
+                <vs-input type="password" label="Password" v-model="password" label-placeholder="Password"
 
-      <button type="submit">Log In</button>
-      <span>Don't have an account?<router-link to="/register"> <a href="">Sign up</a></router-link></span>
+                :visiblePassword="hasVisiblePassword"
+                icon-after
+                @click-icon="hasVisiblePassword = !hasVisiblePassword">
+                    <template #icon>
+                    <i v-if="!hasVisiblePassword" class='bx bx-show-alt'></i>
+                    <i v-else class='bx bx-hide'></i>
+                    </template>
+
+                     <template v-if="getProgress >= 100" #message-success>
+                    Secure password
+                    </template>
+                </vs-input>
+            </div>
+
+            <div class="knd-field-group">
+            <vs-button >Login</vs-button>
+            </div>
+            <span>Don't have an account?<router-link to="/signup"> <a >Sign up</a></router-link></span>
+
+        </div>
+
     </form>
-  </div>
+
 </template>
 
 <script>
+
+import axios from 'axios';
+
 export default {
     data:() =>  ({
         'email': '',
         'password': '',
+        hasVisiblePassword: false
 
     }),
 
@@ -33,69 +68,73 @@ export default {
             }
 
             axios.post('api/auth/login', data, {}).then((res) => {
-                console.log(res.data);
+                this.$vs.notification({
+                    flat: true,
+                    color:'success',
+                    position:'top-center',
+                    title: 'Login Success',
+                    // text: res.data.access_token,
+                    text: "Welcome to my page",
+                })
             }).catch((err) => {
-                console.log(err.response.data);
+                this.$vs.notification({
+                    flat: true,
+                    color:'danger',
+                    position:'top-center',
+                    title: 'Login Fail',
+                    text: err.response.data.error
+                })
             });
 
 
         }
     },
+
+    computed: {
+        validEmail() {
+          return /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(this.email)
+        },
+
+
+      }
 }
 </script>
 
 <style>
-/* new */
-    #backend-view {
-  height: 100vh;
-  background-color: #f3f4f6;
-  display: grid;
-  align-items: center;
+
+    .knd-form{
+        height: 80vh;
+        width: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
     }
-    form {
-    width: 400px;
-    background-color: #ffffff;
-    margin: 0 auto;
-    border-radius: 10px;
-    border: 2px solid rgba(255, 255, 255, 0.1);
-    padding: 50px 35px;
+
+    .knd-form-field {
+        margin-top: 2rem;
+        margin-bottom: 2rem;
     }
-    form * {
-    letter-spacing: 0.5px;
-    outline: none;
+
+    .knd-form-x {
+        padding: 1.25rem;
+        background-color: aquamarine;
     }
-    label {
-    display: block;
-    margin-top: 20px;
-    font-size: 16px;
-    font-weight: 500;
+
+    .vs-input {
+        width: 400px !important;
     }
-    input {
-    display: block;
-    height: 50px;
-    width: 100%;
-    border-radius: 3px;
-    padding: 0 10px;
-    margin-top: 8px;
-    font-size: 16px;
-    font-weight: 300;
+
+    .knd-field-group {
+        display: flex;
+        align-items: center;
+        flex-direction: row;
+        margin-top: 0.50rem;
     }
-    button {
-    margin-top: 50px;
-    width: 100%;
-    background-color: rgba(0, 46, 173, 0.7);
-    color: #ffffff;
-    padding: 15px 0;
-    font-size: 18px;
-    font-weight: 600;
-    border-radius: 5px;
-    cursor: pointer;
-    }
-    form span {
-    display: block;
-    margin-top: 35px;
-    }
-    a {
-    color: rgba(0, 46, 173, 0.8);
+
+    .knd-field-group a{
+        text-decoration: none !important;
+        text-transform: capitalize;
+        margin-left: 0.25rem;
+        cursor: pointer;
     }
 </style>

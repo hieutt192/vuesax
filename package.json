@@ -16,10 +16,12 @@
     },
     "dependencies": {
         "@vitejs/plugin-vue2": "^2.0.0",
+        "boxicons": "^2.1.4",
+        "chalk": "^4.1.2",
         "material-icons": "^1.12.0",
         "vue": "^2.7.13",
         "vue-router": "^3.6.5",
-        "vuesax": "^3.12.2",
+        "vuesax": "^4.0.1-alpha.25",
         "vuex": "^3.6.2"
     }
 }

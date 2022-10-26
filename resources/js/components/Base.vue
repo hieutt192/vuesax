@@ -1,7 +1,10 @@
 <template>
 <div id="app">
     <BaseNarBar/>
-    <router-view/>
+    <div class="square">
+
+        <router-view/>
+    </div>
 </div>
 </template>
 
@@ -16,5 +19,7 @@ export default {
 </script>
 
 <style>
-
+    .square {
+        margin-top: 4.25rem;
+    }
 </style>
