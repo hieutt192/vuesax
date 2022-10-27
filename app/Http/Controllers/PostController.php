@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Post;
 use Illuminate\Http\Request;
 use App\Http\Resources\PostResource;
+use App\Models\User;
 use Illuminate\Support\Facades\Validator;
 
 class PostController extends Controller
@@ -47,7 +48,7 @@ class PostController extends Controller
     {
 
         $data =Validator::make($request->all(),[
-            'title' => 'required|max:5',
+            // 'title' => 'required|max:5',
             'content' => 'required',
         ]);
 
@@ -57,14 +58,23 @@ class PostController extends Controller
         }
 
         $create = Post::create([
-            'title' => $request->get('title'),
+            // 'title' => $request->get('title'),
             'content' => $request->get('content'),
             'user_id' => auth()->user()->id,
         ]);
 
         $create->save();
 
-        return response()->json($create);
+        $newPost= array(
+            'id' =>$create->id,
+            'content' =>$create->content,
+            'user_id' =>User::find($create->user_id),
+        );
+
+        return response()->json([
+            'message' => "Post has been created !",
+            'result' => $newPost,
+        ],201);
     }
 
     /**
@@ -114,7 +124,7 @@ class PostController extends Controller
                 'message' => 'Not Found ',
             ]);
         }
-        $retrive_post->title = $request->get('title');
+        // $retrive_post->title = $request->get('title');
         $retrive_post->content = $request->get('content');
 
         $retrive_post->save();

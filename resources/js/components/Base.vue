@@ -2,18 +2,20 @@
 <div id="app">
     <BaseNarBar/>
     <div class="square">
-
         <router-view/>
     </div>
+    <!-- <BaseSideBar/> -->
 </div>
 </template>
 
 <script>
-import BaseNarBar from './narbar/BaseNarBar.vue'
+import BaseNarBar from './layouts/BaseNarBar.vue'
+// import BaseSideBar from './layouts/BaseSideBar.vue'
 
 export default {
     components: {
         BaseNarBar,
+        // BaseSideBar,
     }
 }
 </script>

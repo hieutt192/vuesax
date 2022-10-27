@@ -46,11 +46,11 @@
 
             <div class="knd-form-field">
                     <vs-input  type="password" v-model="confirm_password" label-placeholder="Confirm_Password"
-                    
+
                     :visiblePassword="hasVisiblePassword"
                     icon-after
                     @click-icon="hasVisiblePassword = !hasVisiblePassword">
-                        
+
                     </vs-input>
             </div>
 
@@ -73,6 +73,7 @@
 <script>
 
 import axios from 'axios';
+import { mapActions } from 'vuex'
 
 export default {
     data:() => ({
@@ -84,6 +85,7 @@ export default {
     }),
 
     methods: {
+        ...mapActions(['RegisterUser']),
 
         onSubmit() {
             const data = {
@@ -93,7 +95,8 @@ export default {
                 confirm_password: this.confirm_password,
             }
 
-            axios.post('api/register', data, {}).then((res) => {
+            this.RegisterUser(data).then((res) => {
+                this.$router.push('/login')
                 this.$vs.notification({
                     flat: true,
                     color:'success',
@@ -111,6 +114,7 @@ export default {
                     text: err.response.data.message
                 })
             });
+
         },
 
     },
@@ -119,7 +123,7 @@ export default {
         validEmail() {
           return /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(this.email)
         },
-        
+
         getProgress() {
           let progress = 0
 

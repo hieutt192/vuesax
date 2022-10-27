@@ -30,9 +30,7 @@
                     <i v-else class='bx bx-hide'></i>
                     </template>
 
-                     <template v-if="getProgress >= 100" #message-success>
-                    Secure password
-                    </template>
+
                 </vs-input>
             </div>
 
@@ -50,6 +48,7 @@
 <script>
 
 import axios from 'axios';
+import {mapActions} from 'vuex';
 
 export default {
     data:() =>  ({
@@ -60,30 +59,37 @@ export default {
     }),
 
     methods: {
+        ...mapActions(['loginUser']),
+
         onSubmit() {
+
             const data = {
                 email: this.email,
                 password: this.password,
 
             }
 
-            axios.post('api/login', data, {}).then((res) => {
+
+            this.loginUser(data).then((res) => {
                 this.$vs.notification({
                     flat: true,
                     color:'success',
                     position:'top-center',
                     title: 'Login Successful',
-                    // text: res.data.access_token,
+                    // text: res.data.authorisation.token,
                     text: "Welcome to my page !",
                 })
+
+                localStorage.setItem('token',res.data.authorisation.token)
             }).catch((err) => {
                 this.$vs.notification({
                     flat: true,
                     color:'danger',
                     position:'top-center',
                     title: 'Login Fail',
-                    // text: err.response.data.error,
-                    text: "Email or Password incorrect !",
+                    text: err.response.data.message,
+                    // text: "Email or Password incorrect !",
+
 
                 })
             });

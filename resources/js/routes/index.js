@@ -9,7 +9,7 @@ import Signup from '@/components/auth/BaseSignup.vue'
 
 
 // error page
-import notFound from '../components/errors/notFound.vue'
+import notFound from '@/components/errors/notFound.vue'
 
 
 Vue.use(VueRouter)

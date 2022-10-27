@@ -26,7 +26,7 @@ class AuthController extends Controller
         if (!$token) {
             return response()->json([
                 'status' => 'error',
-                'message' => 'Unauthorized',
+                'message' => 'Email or Password incorrect !',
             ], 401);
         }
 
@@ -117,5 +117,14 @@ class AuthController extends Controller
             ]
         ]);
     }
+
+    // protected function respondWithToken($token)
+    // {
+    //     return response()->json([
+    //         'access_token' => $token,
+    //         'token_type' => 'bearer',
+    //         'expires_in' => auth()->factory()->getTTL() * 60
+    //     ]);
+    // }
 
 }
