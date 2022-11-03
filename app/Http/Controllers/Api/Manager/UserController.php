@@ -24,6 +24,7 @@ class UserController extends Controller
     {
         //
         $user = User::paginate(10);
+        // $user = User::get();
 
         return UserResource::collection($user);
     }
@@ -71,6 +72,7 @@ class UserController extends Controller
         $create->save();
 
         $newUser= array(
+            'id' => $create ->id,
             'name' =>$create->name,
             'email' =>$create->email,
             'password' => $create->password,
@@ -160,6 +162,7 @@ class UserController extends Controller
     {
         //
         $retrive_user = User::find($id);
+
         if (!$retrive_user) {
             # code...
             return response()->json([
@@ -169,7 +172,7 @@ class UserController extends Controller
         $retrive_user ->delete();
 
         return response([
-            'message' => 'User with '.$id.' deleted successfully!',
+            'message' => 'User with "'.$retrive_user['name'].'" deleted successfully!',
             'post'=> $retrive_user,
         ]);
     }

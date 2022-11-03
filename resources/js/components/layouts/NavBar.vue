@@ -11,9 +11,9 @@
           User
         </vs-navbar-item>
 
-        <template #right>
+        <!-- <template #right>
           <vs-button flat @click.prevent="logoutUser" >Logout</vs-button>
-        </template>
+        </template> -->
       </vs-navbar>
 
     </div>

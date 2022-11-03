@@ -17,6 +17,16 @@ const actions = {
         return response;
     },
 
+    async getUser({commit},data) {
+        const response = await axios.get(`api/user/${data}`, {
+            headers: {
+                Authorization: `Bearer ${localStorage.getItem("token")}`,
+            },
+        });
+
+        return response;
+    },
+
     async createUser({commit}, data) {
         const response = await axios.post('api/user/store', data, {
             headers: {
@@ -27,7 +37,7 @@ const actions = {
         return response;
     },
 
-    async deletePost({commit}, data){
+    async deleteUser({commit}, data){
         const response = await axios.delete(`api/user/${data}`, {
             headers: {
                 'Authorization' : `Bearer ${localStorage.getItem('token')}`
@@ -37,18 +47,13 @@ const actions = {
         return response
     },
 
-    async updatePost({commit}, data){
-        const response = await axios.put(`api/user/${data.id}`,data,{
-            name: data.name,
-            email: data.email,
-            phone: data.phone,
-            role: data.role,
-        },
+    async updateUser({commit}, data){
+        const response = await axios.put(`api/user/${data.id}`,data,
          {
             headers: {
                 'Authorization' : `Bearer ${localStorage.getItem('token')}`
             }
-        })
+        });
 
         return response
     },
@@ -62,7 +67,7 @@ const mutations = {
     DELETE_USER: (user,pk) => (user.items= user.items.filter(function(x){
         return x.id !== pk
     })),
-    UPDATE_USER: (user,data) => (user.items= user.items.map((x) => x.id == data.id ? data: x)),
+    UPDATE_USER: (user,data) => (user.item= user.item.map((x) => x.id == data.id ? data: x)),
 
 };
 

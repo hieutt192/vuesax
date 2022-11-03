@@ -36,8 +36,8 @@ const actions = {
             commit('SET_TOKEN', null)
             localStorage.removeItem('tokenClient')
           } else {
-            commit('SET_TOKEN', data.token.access_token)
-            localStorage.setItem('tokenClient', data.token.access_token)
+            commit('SET_TOKEN', data.authorisation.token)
+            localStorage.setItem('tokenClient', data.authorisation.token)
           }
     }
 

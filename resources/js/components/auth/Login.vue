@@ -37,7 +37,7 @@
             <div class="knd-field-group">
             <vs-button >Login</vs-button>
             </div>
-            <span>Don't have an account?<router-link to="/signup"> <a >Sign up</a></router-link></span>
+            <span>Don't have an account?<router-link to="/register"> <a >Sign up</a></router-link></span>
 
         </div>
 
