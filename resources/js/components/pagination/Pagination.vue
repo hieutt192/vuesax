@@ -1,48 +1,58 @@
-<script>
-export default {
-  props: {
-    maxVisibleButtons: {
-      type: Number,
-      required: false,
-      default: 3
-    },
-    totalPages: {
-      type: Number,
-      required: true
-    },
-    total: {
-      type: Number,
-      required: true
-    },
-    currentPage: {
-      type: Number,
-      required: true
-    }
-  }
-};
-</script>
 <template>
-  <ul>
-    <li>
-      <button type="button">
-        First
-      </button>
-    </li>
-    <li>
-      <button type="button">
-        Previous
-      </button>
-    </li>
-    <!-- Range of pages -->
-    <li>
-      <button type="button">
-        Next
-      </button>
-    </li>
-    <li>
-      <button type="button">
-        Last
-      </button>
-    </li>
-  </ul>
+    <nav>
+        <ul class="pagination">
+            <li v-if="pagination.current_page > 1">
+                <a href="#" aria-label="Previous" v-on:click.prevent="changePage(pagination.current_page - 1)">
+                    <span aria-hidden="true">«</span>
+                </a>
+            </li>
+            <li v-for="(page) in pagesNumber" :class="{'active': page == pagination.current_page}">
+                <a href="#" v-on:click.prevent="changePage(page)">{{ page }}</a>
+            </li>
+            <li v-if="pagination.current_page < pagination.last_page">
+                <a href="#" aria-label="Next" v-on:click.prevent="changePage(pagination.current_page + 1)">
+                    <span aria-hidden="true">»</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
 </template>
+<script>
+    export default{
+        props: {
+            pagination: {
+                type: Object,
+                required: true
+            },
+            offset: {
+                type: Number,
+                default: 4
+            }
+        },
+        computed: {
+            pagesNumber: function () {
+                if (!this.pagination.to) {
+                    return [];
+                }
+                var from = this.pagination.current_page - this.offset;
+                if (from < 1) {
+                    from = 1;
+                }
+                var to = from + (this.offset * 2);
+                if (to >= this.pagination.last_page) {
+                    to = this.pagination.last_page;
+                }
+                var pagesArray = [];
+                for (from = 1; from <= to; from++) {
+                    pagesArray.push(from);
+                }
+                return pagesArray;
+            }
+        },
+        methods : {
+            changePage: function (page) {
+                this.pagination.current_page = page;
+            }
+        }
+    }
+</script>

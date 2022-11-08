@@ -26,7 +26,8 @@ class UserController extends Controller
         $user = User::paginate(10);
         // $user = User::get();
 
-        return UserResource::collection($user);
+        // return UserResource::collection($user);
+        return response()->json($user);
     }
 
     /**
