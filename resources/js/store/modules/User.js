@@ -9,10 +9,7 @@ const state = () => ({
 const actions = {
 
     async getListUser({commit},data) {
-        const response = await axios.get(`api/user/${data}`).then((res) => {
-            // commit('LOAD_USER', res.data.data);
-            console.log(res)
-        });
+        const response = await axios.get(`api/user/?page=${data}`);
 
         return response;
     },

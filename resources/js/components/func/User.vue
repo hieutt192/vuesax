@@ -56,7 +56,7 @@
             <template #tbody>
               <vs-tr
                 :key="i"
-                v-for="(tr, i) in $vs.getPage((users), page , pagination.per_page)"
+                v-for="(tr, i) in users "
                 :data="tr"
               >
                 <vs-td>
@@ -85,12 +85,12 @@
               </vs-tr>
             </template>
             <template #footer>
-                <div class="center con-pagination" v-on:click="getUsers(page)">
-                <vs-pagination not-arrows v-model="page " :length="pagination.last_page" />
-                {{page}}
+
+                <div class="center con-pagination" >
+                <vs-pagination not-arrows  :length="data.last_page?data.last_page:1" @input="getUsers(page)" v-model="page"  />
+
                 </div>
 
-              <!-- <pagination v-bind:pagination="pagination" v-on:click.native="getUsers(pagination.current_page)" :offset="4"></pagination> -->
             </template>
           </vs-table>
         </div>
@@ -124,9 +124,7 @@
       />
     </vs-dialog>
 
-    <span>
-        {{page}}
-    </span>
+
 
   </div>
 
@@ -144,6 +142,7 @@ export default {
     page: 1,
     max: 0,
     users: [],
+    data:{},
     user: {},
     searchFilter: "",
     selected: null,
@@ -151,14 +150,8 @@ export default {
     isEdit: false,
     isCreate: false,
     counter: 0,
-    pagination: {
-        total: 0,
-        per_page: 2,
-        from: 1,
-        to: 0,
-        current_page: 1
-    },
-    offset: 4
+
+
   }),
 
   computed: mapGetters(["fetchUser"]),
@@ -169,7 +162,7 @@ export default {
   },
 
   methods: {
-    ...mapActions(["createUser", "fetchData", "deleteUser", "updateUser", "getListUser"]),
+    ...mapActions(["createUser", "fetchData", "deleteUser", "updateUser", "getListUser","getUser"]),
 
     async onEdit(id) {
       const res = await this.getUser(id);
@@ -212,7 +205,7 @@ export default {
       this.clearEvent();
     },
 
-    handleClickDelete() {
+    async handleClickDelete() {
       const pk = this.selected;
       this.deleteUser(pk)
         .then((res) => {
@@ -227,11 +220,12 @@ export default {
           this.dialogDel = false;
         })
         .catch((err) => {});
+        window.location.reload();
     },
 
     async actionEdit() {
-      const data = this.user;
-      this.updateUser(data).then((res) => {
+      const data_temp = this.user;
+      this.updateUser(data_temp).then((res) => {
         console.log(res);
         this.$store.commit("UPDATE_USER", res.data.result);
         this.$vs.notification({
@@ -249,20 +243,23 @@ export default {
 
 
 
-    // getUsers (commit,page) {
-    //     axios.get('api/user?page='+ page)
-    //         .then((response) => {
-    //             this.users = response.data.data
-    //             this.pagination = response.data
-    //         })
-    //         console.log(page);
+    async getUsers (page=1) {
 
-    // }
+
+        this.getListUser(page).then((res) => {
+            // console.log(res.data);
+
+            this.data=res.data;
+            this.users=res.data.data;
+
+      });
+    }
 
   },
 
   mounted() {
     this.fetchData();
+    this.getUsers();
 
   },
 };

@@ -11,15 +11,16 @@
           User
         </vs-navbar-item>
 
-        <!-- <template #right>
-          <vs-button flat @click.prevent="logoutUser" >Logout</vs-button>
-        </template> -->
+        <template #right>
+          <!-- <vs-button flat @click="handleLogout" >Logout</vs-button> -->
+        </template>
       </vs-navbar>
 
     </div>
 </template>
 
 <script>
+import { mapActions } from 'vuex'
 
 export default {
 
@@ -32,9 +33,17 @@ export default {
 
     methods:{
 
+            ...mapActions(['logout']),
+
             handleCLickHistory(newValue){
                 this.$router.push(newValue)
             },
+
+            async handleLogout() {
+                await this.logout()
+                localStorage.getItem("token")
+                localStorage.removeItem('token');
+            }
 
 
         }

@@ -1,5 +1,4 @@
 import axios from 'axios';
-import router from '../../router/index';
 
 
 const state = () => ({
@@ -10,6 +9,7 @@ const actions = {
 
     async loginUser({commit},data){
         const response = await axios.post('api/login', data)
+
         return response
     },
 
@@ -23,23 +23,13 @@ const actions = {
         return response
     },
 
-    async logout({dispatch} ){
-        const response = await axios.get('api/logout')
-        if (response) {
-            dispatch('setToken')
-            router.push('/login')
-        }
+    async logout({commit}){
+        const response = await axios.post('api/logout')
+        localStorage.removeItem('token')
+        return response
     },
 
-    setToken({commit},data = undefined){
-        if (!data) {
-            commit('SET_TOKEN', null)
-            localStorage.removeItem('tokenClient')
-          } else {
-            commit('SET_TOKEN', data.authorisation.token)
-            localStorage.setItem('tokenClient', data.authorisation.token)
-          }
-    }
+
 
 }
 
