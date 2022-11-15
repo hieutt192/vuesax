@@ -16,11 +16,17 @@ class User extends Authenticatable implements JWTSubject
      * @var array<int, string>
      */
     protected $fillable = [
-        'name',
         'email',
         'password',
         'phone',
-        'role'
+        'birthday',
+        'address',
+        'first_name',
+        'last_name',
+        'last_login',
+        'permissions',
+        'email_verified_at',
+        'remember_token',
     ];
 
     /**
@@ -60,6 +66,24 @@ class User extends Authenticatable implements JWTSubject
     public function getJWTCustomClaims()
     {
         return [];
+    }
+
+    public function roles()
+    {
+        return $this->belongsToMany(
+            Role::class,
+            'role_users',
+            'user_id',
+            'role_id',
+
+        );
+    }
+    public function getType($id){
+        $role=Role::select(['roles.slug','ru.role_id'])
+                ->leftJoin('role_users as ru','roles.id','ru.role_id')
+                ->where('ru.user_id',$id)
+                ->first();
+        return $role->slug;
     }
 
 }

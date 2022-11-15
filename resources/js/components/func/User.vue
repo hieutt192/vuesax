@@ -50,6 +50,7 @@
                 <vs-th sort @click="users = $vs.sortData($event, users, 'role')">
                   Role
                 </vs-th>
+
                 <vs-th>Action</vs-th>
               </vs-tr>
             </template>
@@ -63,7 +64,7 @@
                   {{ tr.id }}
                 </vs-td>
                 <vs-td>
-                  {{ tr.name }}
+                  {{ tr.first_name }}
                 </vs-td>
                 <vs-td>
                   {{ tr.email }}
@@ -72,8 +73,9 @@
                   {{ tr.phone }}
                 </vs-td>
                 <vs-td>
-                  {{ tr.role }}
+                  {{ tr.role_name }}
                 </vs-td>
+
                 <vs-td>
                   <vs-button>
                     <i class="bx bx-edit" @click="onEdit(tr.id)"></i>

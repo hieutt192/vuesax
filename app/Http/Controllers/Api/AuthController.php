@@ -3,121 +3,72 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Models\User;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Validator;
-use PHPOpenSourceSaver\JWTAuth\Facades\JWTAuth;
+use App\Http\Requests\LoginRequest;
+use App\Http\Requests\RegisterRequest;
+use App\Services\AuthService;
 
 class AuthController extends Controller
 {
 
-    public function __construct()
+    protected AuthService $authService;
+
+    public function __construct( AuthService $authService)
     {
         $this->middleware('auth:api', ['except' => ['login','register']]);
+        $this->authService = $authService;
     }
 
-    public function login(Request $request)
+    /**
+     * Get a JWT via given credentials.
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function login(LoginRequest $request)
     {
-        $request->validate([
-            'email' => 'required|string|email',
-            'password' => 'required|string',
-        ]);
-        $credentials = $request->only('email', 'password');
 
-        $token = JWTAuth::attempt($credentials);
-        if (!$token) {
-            return response()->json([
-                'status' => 'error',
-                'message' => 'Email or Password incorrect !',
-            ], 401);
-        }
-
-        $user = Auth::user();
-        return response()->json([
-                'status' => 'success',
-                'user' => $user,
-                'authorisation' => [
-                    'token' => $token,
-                    'type' => 'bearer',
-                ]
-            ]);
+        return $this->authService->login($request);
 
     }
 
+    /**
+     * Register user account.
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function register(RegisterRequest $request){
 
-
-    public function register(Request $request){
-
-        $validation = Validator::make($request->all(),[
-            'name' => 'required',
-            'email' => 'required',
-            'password' => 'required|string|min:6',
-            'confirm_password' => 'required',
-            'phone' =>'required',
-
-        ]);
-
-        $unique_email = User::where('email',$request->email)->first();
-
-        if ($unique_email) {
-            # code...
-            return response()->json([
-                'message' => "Email already exists !"
-            ], 400);
-        }
-        if ($request->password != $request->confirm_password) {
-            # code...
-            return response()->json([
-                'message' => "Password don't match !"
-            ], 400);
-        }
-
-        if ($validation->fails()) {
-            # code...
-            return response()->json($validation->errors());
-        }
-
-        $user = User::create([
-            'name' => $request->name,
-            'email' => $request->email,
-            'password' => Hash::make($request->password),
-            'phone' =>$request->phone,
-            'role' =>"User",
-        ]);
-
-        $token = Auth::login($user);
-        return response()->json([
-            'status' => 'success',
-            'message' => 'User created successfully',
-            'user' => $user,
-            'authorisation' => [
-                'token' => $token,
-                'type' => 'bearer',
-            ]
-        ]);
+        return $this->authService->register($request);
     }
 
+    /**
+     * Get the authenticated User.
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function me()
+    {
+        return $this->authService->me();
+    }
+
+    /**
+     * Log the user out (Invalidate the token).
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function logout()
     {
-        Auth::logout();
-        return response()->json([
-            'status' => 'success',
-            'message' => 'Successfully logged out',
-        ]);
+
+        return $this->authService->logout();
     }
 
+    /**
+     * Refresh a token.
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function refresh()
     {
-        return response()->json([
-            'status' => 'success',
-            'user' => Auth::user(),
-            'authorisation' => [
-                'token' => Auth::refresh(),
-                'type' => 'bearer',
-            ]
-        ]);
+        return $this->authService->refresh();
     }
 
 

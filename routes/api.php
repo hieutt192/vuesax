@@ -33,12 +33,16 @@ Route::controller(AuthController::class)->group(function () {
 
 });
 
+
+
 Route::controller(UserController::class)->group(function () {
     Route::get('user/','index');
     Route::post('user/store/','store');
     Route::get('user/{id}','show');
     Route::put('user/{id}','update');
     Route::delete('user/{id}','destroy');
+    Route::get('user/search','search');
+    Route::get('user/getAll','getAll');
     // Route::apiResource('user',PostController::class);
 
 

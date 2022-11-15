@@ -3,17 +3,22 @@
 namespace App\Http\Controllers\Api\Manager;
 
 use App\Http\Controllers\Controller;
-use App\Http\Resources\UserResource;
+use App\Http\Requests\AddUserRequest;
 use App\Models\User;
+use App\Services\UserService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 
 class UserController extends Controller
 {
-    public function __construct()
+
+    protected UserService $userService;
+
+    public function __construct(UserService $userService)
     {
         $this->middleware('auth:api', ['except' => ['index']]);
+        $this->userService= $userService;
     }
     /**
      * Display a listing of the resource.
@@ -22,12 +27,8 @@ class UserController extends Controller
      */
     public function index()
     {
-        //
-        $user = User::paginate(10);
-        // $user = User::get();
 
-        // return UserResource::collection($user);
-        return response()->json($user);
+        return $this->userService->index();
     }
 
     /**
@@ -46,45 +47,9 @@ class UserController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(AddUserRequest $request)
     {
-        //
-        $data =Validator::make($request->all(),[
-            'name' => 'required',
-            'email' => 'email|required|unique:users,email|max:255',
-            'phone' => 'required',
-            'role' => 'required'
-
-        ]);
-
-        if ($data->fails()) {
-            # code...
-            return response()->json($data->errors());
-        }
-
-        $create = User::create([
-            'name' => $request->get('name'),
-            'email' => $request->get('email'),
-            'password' => Hash::make($request->get('phone')),
-            'phone' => $request->get('phone'),
-            'role' => $request->get('role'),
-        ]);
-
-        $create->save();
-
-        $newUser= array(
-            'id' => $create ->id,
-            'name' =>$create->name,
-            'email' =>$create->email,
-            'password' => $create->password,
-            'phone' =>$create->phone,
-            'role' =>$create->role,
-        );
-
-        return response()->json([
-            'message' => "User has been created !",
-            'result' => $newUser,
-        ],201);
+        return $this->userService->store($request);
     }
 
     /**
@@ -95,16 +60,7 @@ class UserController extends Controller
      */
     public function show($id)
     {
-        //
-        $user = User::find($id);
-        if (!$user) {
-            # code...
-            return response()->json([
-                'message' => 'Not Found User',
-            ]);
-        }
-
-        return response()->json($user);
+        return $this->show($id);
     }
 
     /**
@@ -127,30 +83,7 @@ class UserController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
-        $retrive_user = User::find($id);
-        if (!$retrive_user) {
-            return response()->json([
-                'message' => 'Not Found User',
-            ]);
-        }
-        $retrive_user->name = $request->get('name');
-        $retrive_user->email = $request->get('email');
-        $retrive_user->phone = $request->get('phone');
-        $retrive_user->role = $request->get('role');
-        $retrive_user->save();
-
-        $newUser= array(
-            'name' =>$retrive_user->name,
-            'email' =>$retrive_user->email,
-            'phone' =>$retrive_user->phone,
-            'role' =>$retrive_user->role,
-        );
-
-        return response()->json([
-            'message' => 'User has been update !',
-            'result' => $newUser,
-        ],200);
+        return $this->userService->update($request,$id);
     }
 
     /**
@@ -161,20 +94,6 @@ class UserController extends Controller
      */
     public function destroy($id)
     {
-        //
-        $retrive_user = User::find($id);
-
-        if (!$retrive_user) {
-            # code...
-            return response()->json([
-                'message' => 'Not Found User',
-            ]);
-        }
-        $retrive_user ->delete();
-
-        return response([
-            'message' => 'User with "'.$retrive_user['name'].'" deleted successfully!',
-            'post'=> $retrive_user,
-        ]);
+        return $this->destroy($id);
     }
 }
