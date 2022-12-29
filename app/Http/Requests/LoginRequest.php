@@ -13,7 +13,6 @@ class LoginRequest extends BaseResquest
      */
     public function authorize()
     {
-        // return false; // active => change = true
 
         return true;
     }

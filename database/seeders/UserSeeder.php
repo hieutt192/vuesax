@@ -150,46 +150,46 @@ class UserSeeder extends Seeder
                     $role = Sentinel::findRoleBySlug('user');
                     $role->users()->attach($user);
                     break;
-                // case 'user1@example.com':
-                //     $role = Sentinel::findRoleBySlug('user');
-                //     $role->users()->attach($user);
-                //     break;
-                // case 'user2@example.com':
-                //     $role = Sentinel::findRoleBySlug('user');
-                //     $role->users()->attach($user);
-                //     break;
-                // case 'user3@example.com':
-                //     $role = Sentinel::findRoleBySlug('user');
-                //     $role->users()->attach($user);
-                //     break;
-                // case 'user4@example.com':
-                //     $role = Sentinel::findRoleBySlug('user');
-                //     $role->users()->attach($user);
-                //     break;
-                // case 'user5@example.com':
-                //     $role = Sentinel::findRoleBySlug('user');
-                //     $role->users()->attach($user);
-                //     break;
-                // case 'user6@example.com':
-                //     $role = Sentinel::findRoleBySlug('user');
-                //     $role->users()->attach($user);
-                //     break;
-                // case 'user7@example.com':
-                //     $role = Sentinel::findRoleBySlug('user');
-                //     $role->users()->attach($user);
-                //     break;
-                // case 'user8@example.com':
-                //     $role = Sentinel::findRoleBySlug('user');
-                //     $role->users()->attach($user);
-                //     break;
-                // case 'user9@example.com':
-                //     $role = Sentinel::findRoleBySlug('user');
-                //     $role->users()->attach($user);
-                //     break;
-                // case 'user10@example.com':
-                //     $role = Sentinel::findRoleBySlug('user');
-                //     $role->users()->attach($user);
-                //     break;
+                case 'user1@example.com':
+                    $role = Sentinel::findRoleBySlug('user');
+                    $role->users()->attach($user);
+                    break;
+                case 'user2@example.com':
+                    $role = Sentinel::findRoleBySlug('user');
+                    $role->users()->attach($user);
+                    break;
+                case 'user3@example.com':
+                    $role = Sentinel::findRoleBySlug('user');
+                    $role->users()->attach($user);
+                    break;
+                case 'user4@example.com':
+                    $role = Sentinel::findRoleBySlug('user');
+                    $role->users()->attach($user);
+                    break;
+                case 'user5@example.com':
+                    $role = Sentinel::findRoleBySlug('user');
+                    $role->users()->attach($user);
+                    break;
+                case 'user6@example.com':
+                    $role = Sentinel::findRoleBySlug('user');
+                    $role->users()->attach($user);
+                    break;
+                case 'user7@example.com':
+                    $role = Sentinel::findRoleBySlug('user');
+                    $role->users()->attach($user);
+                    break;
+                case 'user8@example.com':
+                    $role = Sentinel::findRoleBySlug('user');
+                    $role->users()->attach($user);
+                    break;
+                case 'user9@example.com':
+                    $role = Sentinel::findRoleBySlug('user');
+                    $role->users()->attach($user);
+                    break;
+                case 'user10@example.com':
+                    $role = Sentinel::findRoleBySlug('user');
+                    $role->users()->attach($user);
+                    break;
             }
         }
     }
