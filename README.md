@@ -15,6 +15,8 @@ Libraray
 - debugbar.
 - laravel: 9.*.
 - php: 8.1*.
+- vue 2
+- vuesax 4 alpha
 
 
 
